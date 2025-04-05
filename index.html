@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPT-4o 生图 Prompt 模版工具</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 90vh; /* 使内容垂直居中 */
+            background-color: #f4f7f9; /* 淡雅的背景色 */
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: #ffffff; /* 白色卡片背景 */
+            padding: 40px 50px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* 更柔和的阴影 */
+            text-align: center; /* 内容居中 */
+            max-width: 650px; /* 限制最大宽度 */
+            width: 100%;
+        }
+        h1 {
+            color: #2c3e50; /* 深蓝灰色标题 */
+            margin-bottom: 15px;
+            font-size: 2em; /* 稍大一点的标题 */
+        }
+        p {
+            color: #555; /* 中灰色段落文本 */
+            line-height: 1.7; /* 更好的行间距 */
+            margin-bottom: 35px; /* 段落下方的间距 */
+            font-size: 1.1em;
+        }
+        .cta-button {
+            display: inline-block; /* 使其像块元素一样可设置内外边距 */
+            padding: 14px 30px; /* 合适的按钮内边距 */
+            background-image: linear-gradient(to right, #4CAF50, #2E8B57); /* 渐变绿色背景 */
+            color: white;
+            text-decoration: none; /* 去掉下划线 */
+            border-radius: 6px; /* 轻微圆角 */
+            font-size: 1.1em; /* 按钮文字大小 */
+            font-weight: bold;
+            border: none; /* 无边框 */
+            cursor: pointer; /* 鼠标悬停时显示指针 */
+            transition: transform 0.2s ease, box-shadow 0.2s ease; /* 平滑过渡效果 */
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        .cta-button:hover {
+            transform: translateY(-2px); /* 悬停时轻微上移 */
+            box-shadow: 0 5px 12px rgba(46, 139, 87, 0.4); /* 悬停时阴影更明显 */
+        }
+        .emoji { /* 为表情符号添加一点样式（可选） */
+            font-size: 1.5em;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>欢迎使用 GPT-4o 生图 Prompt 模版工具<span class="emoji">🎨</span></h1>
+        <p>
+            本工具旨在帮助您更轻松、更规范地构建用于 GPT-4o (及类似 AI 模型) 进行图像生成的详细指令 (Prompt)。请点击下方按钮开始填写表单，提供越详细的信息，生成的图像可能越符合您的预期！
+        </p>
+        <!-- 这个链接指向你的表单文件 -->
+        <a href="ai_image_request_form.html" class="cta-button">进入表单填写</a>
+    </div>
+</body>
+</html>
