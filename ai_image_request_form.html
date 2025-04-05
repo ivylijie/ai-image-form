@@ -5,24 +5,39 @@
   <title>GPT-4o AI 图像生成任务表单</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
       padding: 40px;
       background-color: #f5f5f5;
       color: #333;
+      line-height: 1.6;
     }
     h1 {
       color: #222;
       text-align: center;
       margin-bottom: 30px;
+      font-size: 2.2em;
     }
     h2 {
       border-bottom: 1px solid #eee;
       padding-bottom: 10px;
       margin-top: 0;
       margin-bottom: 25px;
-      font-size: 1.3em;
+      font-size: 1.4em;
       color: #333;
     }
+     h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-size: 1.2em;
+      border-bottom: none;
+      color: #333;
+    }
+     h4 {
+         margin-top: 0;
+         margin-bottom: 15px;
+         color: #555;
+         font-size: 1.1em;
+     }
     label {
       font-weight: bold;
       display: block;
@@ -41,74 +56,89 @@
       border: 1px solid #ccc;
       border-radius: 4px;
       box-sizing: border-box;
+      font-size: 1em;
     }
     input[type="color"] {
         padding: 5px;
         height: 40px;
     }
     input[type="file"] {
-      padding: 6px;
+      padding: 8px 6px;
       border: 1px solid #ccc;
       border-radius: 4px;
       width: 100%;
       box-sizing: border-box;
-      margin-bottom: 16px;
+      margin-bottom: 10px; /* Reduce margin slightly */
       display: block;
+      font-size: 0.95em;
     }
     .form-section {
       background-color: #fff;
-      padding: 24px;
+      padding: 24px 30px;
       border-radius: 8px;
       margin-bottom: 32px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.07);
     }
-    .submit-btn, .add-btn, .remove-btn {
+    .submit-btn, .add-btn, .remove-btn, .copy-btn { /* Style all action buttons */
       background-color: #4CAF50;
       color: white;
       padding: 10px 18px;
-      font-size: 14px;
+      font-size: 1em;
       border: none;
-      border-radius: 4px;
+      border-radius: 5px;
       cursor: pointer;
       margin-right: 10px;
-      transition: background-color 0.2s;
+      transition: background-color 0.2s, transform 0.1s ease;
+      text-decoration: none; /* For copy button if styled as link */
+      display: inline-block; /* Ensure consistent behaviour */
+      vertical-align: middle;
     }
-    .submit-btn {
+     .submit-btn { /* Generate button specific styles */
         padding: 14px 24px;
-        font-size: 16px;
+        font-size: 1.1em;
+        font-weight: bold;
         display: block;
         width: 100%;
         max-width: 300px;
-        margin: 20px auto 0;
+        margin: 30px auto 10px; /* More margin top */
     }
      .add-btn {
         background-color: #007bff;
-        margin-top: 10px;
+        margin-top: 5px; /* Less margin top for add buttons */
     }
     .remove-btn {
         background-color: #dc3545;
-        font-size: 12px;
+        font-size: 0.85em;
         padding: 5px 10px;
+        line-height: 1.4;
     }
-    .submit-btn:hover { background-color: #45a049; }
-    .add-btn:hover { background-color: #0056b3; }
-    .remove-btn:hover { background-color: #c82333; }
+    .copy-btn {
+         background-color: #5cb85c; /* Specific green */
+         padding: 12px 25px;
+         font-size: 1.05em;
+    }
+
+    .submit-btn:hover { background-color: #45a049; transform: scale(1.02); }
+    .add-btn:hover { background-color: #0056b3; transform: scale(1.03); }
+    .remove-btn:hover { background-color: #c82333; transform: scale(1.05);}
+    .copy-btn:hover { background-color: #4cae4c; transform: scale(1.03); }
 
     .note {
-      font-size: 14px;
+      font-size: 0.9em;
       color: #666;
-      margin-top: -8px;
-      margin-bottom: 20px;
+      margin-top: -6px; /* Pull closer to the element above */
+      margin-bottom: 18px;
+      line-height: 1.5;
     }
     .checkbox-container {
         display: flex;
         align-items: center;
-        margin-top: 10px;
-        margin-bottom: 16px;
+        margin-top: 12px;
+        margin-bottom: 18px;
     }
     .checkbox-container input[type="checkbox"] {
         width: auto;
-        margin: 0 8px 0 0;
+        margin: 0 10px 0 2px; /* More space after checkbox */
     }
     .checkbox-container label {
         margin: 0;
@@ -118,7 +148,7 @@
     .dimension-inputs {
         display: flex;
         gap: 15px;
-        align-items: center;
+        align-items: flex-end; /* Align text and inputs better */
     }
     .dimension-inputs > div {
         flex: 1;
@@ -132,23 +162,18 @@
     }
     .product-item, .reference-item, .copy-item {
       border: 1px dashed #ddd;
-      padding: 15px 15px 20px 15px; /* More bottom padding */
+      padding: 15px 15px 20px 15px;
       margin-bottom: 20px;
       border-radius: 5px;
       background-color: #fafafa;
       position: relative;
     }
-     .product-item h4, .reference-item h4, .copy-item h4 {
-         margin-top: 0;
-         margin-bottom: 15px;
-         color: #555;
-         font-size: 1.1em;
-     }
+
      .product-item label, .reference-item label, .copy-item label {
         font-size: 0.9em;
         margin-top: 10px;
      }
-     .product-item input[type="file"], /* Specificity for product item inputs */
+     .product-item input[type="file"],
      .product-item input[type="text"],
      .reference-item input[type="file"],
      .reference-item input[type="url"],
@@ -179,7 +204,7 @@
         right: 10px;
     }
     .product-item p.note, .reference-item p.note, .copy-item p.note {
-        margin-top: 0;
+        margin-top: -2px; /* Adjust note position within item */
         margin-bottom: 10px;
         font-size: 0.85em;
     }
@@ -188,57 +213,103 @@
     .copy-item .copy-controls select:disabled {
         background-color: #e9ecef;
         cursor: not-allowed;
+        opacity: 0.7;
     }
     /* Specific style for product relationship text area */
     #product_relations_container {
-        margin-top: 20px;
+        margin-top: 25px;
         padding-top: 20px;
         border-top: 1px solid #eee;
     }
+     /* Prompt output styles */
+      #prompt-display-section {
+      background-color: #fff;
+      padding: 24px 30px;
+      border-radius: 8px;
+      margin-top: 32px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.07);
+      border: 1px solid #4CAF50; /* Highlight border */
+    }
+    #prompt-output {
+      background-color: #e9f5e9; /* Lighter green background */
+      border: 1px solid #c8e6c9;
+      border-radius: 4px;
+      padding: 15px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+      font-size: 0.95em; /* Slightly larger mono font */
+      line-height: 1.7; /* Better readability */
+      max-height: 450px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+      color: #1b5e20; /* Darker green text */
+    }
+     .copy-btn-container {
+        text-align: center;
+        margin-top: 15px;
+        margin-bottom: 15px;
+     }
+     #copy-prompt-btn .copy-icon { /* Style for icon inside button */
+        margin-right: 8px;
+        font-size: 1.1em;
+        vertical-align: middle;
+     }
+     #post-generation-instructions {
+        text-align: center;
+        font-size: 1em; /* Standard size for instructions */
+        color: #555;
+     }
+     #post-generation-instructions a, #prompt-display-section > p a { /* Style links */
+        color: #007bff;
+        text-decoration: none;
+        font-weight: bold;
+     }
+     #post-generation-instructions a:hover, #prompt-display-section > p a:hover {
+         text-decoration: underline;
+     }
+     #prompt-display-section > p { /* Style paragraph in prompt section */
+         font-size: 1.05em;
+         line-height: 1.7;
+     }
+     strong { /* Make strong text stand out */
+         color: #d9534f; /* Reddish color for emphasis */
+     }
   </style>
 </head>
 <body>
 
-  <h1>GPT-4o AI 图像生成任务表单</h1>
+  <h1>GPT-4o 生图 Prompt 模版</h1>
 
-  <form action="#" method="post" enctype="multipart/form-data">
+  <form id="image-gen-form"> <!-- Removed action/method/enctype as it's client-side -->
 
-    <!-- 1. 产品信息 (可添加多个) -->
+    <!-- Section 1: Product Info (Dynamic) -->
     <div class="form-section">
       <h2>1. 产品信息 (最多5个)</h2>
-      <p class="note">请至少提供一个产品。如需生成包含多个产品的图片，请点击下方按钮添加更多产品。</p>
-
+      <p class="note">请至少提供一个产品。如需生成包含多个产品的图片，请点击下方按钮添加。</p>
       <div id="product-container">
-        <!-- 产品 1 (默认显示) -->
         <div class="product-item" data-index="1">
             <h4>产品 1</h4>
-            <!-- No remove button for the first product -->
             <label for="product_name_1">产品名称（中英文）</label>
             <input type="text" id="product_name_1" name="product_name_1" required placeholder="例如：智能保温杯 Smart Thermal Mug">
-
             <label for="transparent_image_1">上传产品透明图 (PNG)</label>
             <input type="file" id="transparent_image_1" name="transparent_image_1" accept="image/png" required>
             <p class="note">请确保图片背景透明。</p>
-
             <label for="model_file_1">上传产品3D模型或纹理包（可选）</label>
             <input type="file" id="model_file_1" name="model_file_1" accept=".zip,.glb,.fbx,.obj,.mtl">
             <p class="note">提供模型有助于更精确还原。</p>
         </div>
-        <!-- More products will be added here -->
       </div>
-
       <button type="button" id="add-product-btn" class="add-btn">添加更多产品</button>
       <p id="product-limit-msg" class="note" style="color: red; display: none; margin-top: 10px;">最多添加 5 个产品。</p>
-
-      <!-- Multi-product Relationship Description (Appears or becomes relevant when count > 1) -->
-      <div id="product_relations_container" style="display: none;"> <!-- Initially hidden, shown by JS when needed -->
+      <div id="product_relations_container" style="display: none;">
           <label for="product_relations">多产品关系与布局描述 (若添加了多个产品)</label>
           <textarea id="product_relations" name="product_relations" rows="4" placeholder="描述产品间的互动或位置关系。例如：'将 产品1 放在 产品2 的左侧，两者之间有柔和的光线连接'；'产品1 和 产品3 并排展示在桌面上，产品2 悬浮在它们上方'；'体现 产品A 为 产品B 充电的场景'。"></textarea>
           <p class="note">描述越清晰，AI越能理解产品间的布局和功能联系。</p>
       </div>
     </div>
 
-    <!-- 2. 参考图 (可选, 最多10张) -->
+    <!-- Section 2: Reference Images (Dynamic) -->
     <div class="form-section">
         <h2>2. 参考图 (可选, 最多10张)</h2>
         <p class="note">上传图片或链接作为风格、构图、光影或元素参考。请为每张参考图添加说明。</p>
@@ -247,7 +318,7 @@
         <p id="reference-limit-msg" class="note" style="color: red; display: none; margin-top: 10px;">最多添加 10 张参考图。</p>
     </div>
 
-    <!-- 3. 图像用途 -->
+    <!-- Section 3: Image Purpose -->
     <div class="form-section">
       <h2>3. 图像用途</h2>
       <label for="scene_purpose">选择主要用途（单选）</label>
@@ -257,60 +328,34 @@
         <option value="京东主图">京东主图</option>
         <option value="京东详情页">京东详情页</option>
         <option value="亚马逊主图">亚马逊主图</option>
-        <option value="社交媒体宣传图">社交媒体宣传图（Instagram / Facebook / TikTok / 小红书）</option>
-        <option value="短视频封面图">短视频封面图（抖音 / YouTube / Reels）</option>
+        <option value="社交媒体宣传图">社交媒体宣传图 (Ins/FB/TikTok/小红书)</option>
+        <option value="短视频封面图">短视频封面图 (抖音/YouTube/Reels)</option>
         <option value="产品包装设计图">产品包装设计图</option>
-        <option value="线下物料">线下物料（海报、展架、手册）</option>
-        <option value="App内展示图">App内展示图（iOS / Android）</option>
+        <option value="线下物料">线下物料 (海报/展架/手册)</option>
+        <option value="App内展示图">App内展示图 (iOS/Android)</option>
         <option value="网站首页轮播图">网站首页轮播图</option>
-        <option value="电商Banner图">电商Banner图（节日、活动等）</option>
+        <option value="电商Banner图">电商Banner图 (节日/活动等)</option>
         <option value="PPT宣传/招商资料">PPT宣传/招商资料</option>
         <option value="微信公众号图文配图">微信公众号图文配图</option>
-        <option value="报价单、宣传册插图">报价单、宣传册插图</option>
+        <option value="报价单、宣传册插图">报价单/宣传册插图</option>
         <option value="小程序商品展示图">小程序商品展示图</option>
-        <option value="视频中插图或背景板">视频中插图或背景板</option>
-        <option value="跨境电商平台图">跨境电商平台图（Walmart、eBay、Shopee、Lazada 等）</option>
-        <option value="其他">其他（请在下方备注）</option>
+        <option value="视频中插图或背景板">视频中插图/背景板</option>
+        <option value="跨境电商平台图">跨境电商平台图 (Walmart/eBay/Shopee/Lazada)</option>
+        <option value="其他">其他</option>
       </select>
       <label for="purpose_other">其他用途备注</label>
       <input type="text" id="purpose_other" name="purpose_other" placeholder="若上方选择“其他”，请在此处详细说明">
     </div>
 
-    <!-- 4. 背景与风格偏好 -->
+    <!-- Section 4: Background & Style Preferences -->
     <div class="form-section">
         <h2>4. 背景与风格偏好</h2>
-        <!-- Background and Style selects remain the same -->
         <label for="background_style">背景风格（单选）</label>
         <select id="background_style" name="background_style">
-             <optgroup label="室内类场景背景">
-              <option value="北欧风卧室">北欧风卧室</option>
-              <option value="日式木质地板">日式木质地板</option>
-              <option value="轻奢书房">轻奢书房</option>
-              <option value="儿童房">儿童房</option>
-              <option value="厨房台面">厨房台面</option>
-              <option value="卫生间洗手台">卫生间洗手台</option>
-              <option value="办公桌面">办公桌面</option>
-              <option value="储物柜或角落陈列架">储物柜或角落陈列架</option>
-            </optgroup>
-            <optgroup label="户外类背景">
-              <option value="公园草地">公园草地</option>
-              <option value="阳台晨光">阳台晨光</option>
-              <option value="花园桌面">花园桌面</option>
-              <option value="落地窗前阳光">落地窗前阳光</option>
-              <option value="傍晚庭院灯光">傍晚庭院灯光</option>
-              <option value="沙滩或野营场景">沙滩或野营场景</option>
-              <option value="城市街头或咖啡馆外摆">城市街头或咖啡馆外摆</option>
-            </optgroup>
-            <optgroup label="特殊风格类">
-              <option value="清新绿植装饰背景">清新绿植装饰背景</option>
-              <option value="毛毯/棉麻材质背景">毛毯/棉麻材质背景</option>
-              <option value="暗调布景">暗调布景</option>
-              <option value="炫光渐变">炫光渐变</option>
-              <option value="高科技虚拟场景">高科技虚拟场景</option>
-              <option value="手绘插画风背景">手绘插画风背景</option>
-              <option value="极简纯色背景">极简纯色背景</option>
-            </optgroup>
-            <option value="其他">其他（请在下方备注）</option>
+             <optgroup label="室内类"> <option value="北欧风卧室">北欧风卧室</option> <option value="日式木质地板">日式木质地板</option> <option value="轻奢书房">轻奢书房</option> <option value="儿童房">儿童房</option> <option value="厨房台面">厨房台面</option> <option value="卫生间洗手台">卫生间洗手台</option> <option value="办公桌面">办公桌面</option> <option value="储物柜或角落陈列架">储物柜/角落陈列架</option> </optgroup>
+             <optgroup label="户外类"> <option value="公园草地">公园草地</option> <option value="阳台晨光">阳台晨光</option> <option value="花园桌面">花园桌面</option> <option value="落地窗前阳光">落地窗前阳光</option> <option value="傍晚庭院灯光">傍晚庭院灯光</option> <option value="沙滩或野营场景">沙滩/野营</option> <option value="城市街头或咖啡馆外摆">街头/咖啡馆外摆</option> </optgroup>
+             <optgroup label="特殊风格类"> <option value="清新绿植装饰背景">清新绿植</option> <option value="毛毯/棉麻材质背景">毛毯/棉麻材质</option> <option value="暗调布景">暗调布景</option> <option value="炫光渐变">炫光渐变</option> <option value="高科技虚拟场景">高科技虚拟</option> <option value="手绘插画风背景">手绘插画风</option> <option value="极简纯色背景">极简纯色</option> </optgroup>
+             <option value="其他">其他</option>
         </select>
         <label for="background_other">其他背景风格备注</label>
         <input type="text" id="background_other" name="background_other" placeholder="若上方选择“其他”，请在此处详细说明">
@@ -318,18 +363,18 @@
         <label style="margin-top: 25px;">图片风格（可选，可组合选择）</label>
         <p class="note" style="margin-bottom: 10px;">选择符合期望的关键词，AI会尝试融合。</p>
         <label for="style_space">空间感/氛围类</label>
-        <select id="style_space" name="style_space"> <option value="">（不指定）</option> <option value="沉浸感">沉浸感</option> <option value="高级感">高级感</option> <option value="治愈风">治愈风</option> <option value="舒适氛围">舒适氛围</option> <option value="清爽自然">清爽自然</option> <option value="松弛感">松弛感</option> <option value="居家温馨">居家温馨</option> <option value="未来感 / 赛博风">未来感 / 赛博风</option> <option value="复古美学">复古美学</option> <option value="原生态风">原生态风</option> </select>
+        <select id="style_space" name="style_space"> <option value="">（不指定）</option> <option value="沉浸感">沉浸感</option> <option value="高级感">高级感</option> <option value="治愈风">治愈风</option> <option value="舒适氛围">舒适氛围</option> <option value="清爽自然">清爽自然</option> <option value="松弛感">松弛感</option> <option value="居家温馨">居家温馨</option> <option value="未来感 / 赛博风">未来感/赛博</option> <option value="复古美学">复古美学</option> <option value="原生态风">原生态风</option> </select>
         <label for="style_light">光影类</label>
-        <select id="style_light" name="style_light"> <option value="">（不指定）</option> <option value="柔光漫射">柔光漫射</option> <option value="日落金光">日落金光</option> <option value="阴影对比强烈">阴影对比强烈 (Chiaroscuro)</option> <option value="自然逆光">自然逆光 (Backlit)</option> <option value="镜面反射">镜面反射</option> <option value="局部聚光">局部聚光 (Spotlight)</option> <option value="伦勃朗光">伦勃朗光 (Rembrandt Lighting)</option> </select>
+        <select id="style_light" name="style_light"> <option value="">（不指定）</option> <option value="柔光漫射">柔光漫射</option> <option value="日落金光">日落金光</option> <option value="阴影对比强烈">阴影对比强烈</option> <option value="自然逆光">自然逆光</option> <option value="镜面反射">镜面反射</option> <option value="局部聚光">局部聚光</option> <option value="伦勃朗光">伦勃朗光</option> </select>
         <label for="style_composition">构图类</label>
-        <select id="style_composition" name="style_composition"> <option value="">（不指定）</option> <option value="居中构图">居中构图</option> <option value="留白构图">留白构图 (Negative Space)</option> <option value="对称构图">对称构图</option> <option value="黄金分割/三分法">黄金分割/三分法</option> <option value="场景嵌套">场景嵌套（产品+背景互动）</option> <option value="极近特写">极近特写 (Extreme Close-up)</option> <option value="俯视角度">俯视角度 (Top-down view / Flat lay)</option> <option value="仰视角度">仰视角度 (Low-angle view)</option> </select>
+        <select id="style_composition" name="style_composition"> <option value="">（不指定）</option> <option value="居中构图">居中构图</option> <option value="留白构图">留白构图</option> <option value="对称构图">对称构图</option> <option value="黄金分割/三分法">黄金分割/三分法</option> <option value="场景嵌套">场景嵌套</option> <option value="极近特写">极近特写</option> <option value="俯视角度">俯视角度</option> <option value="仰视角度">仰视角度</option> </select>
         <label for="style_brand">参考品牌/风格类</label>
-        <select id="style_brand" name="style_brand"> <option value="">（不指定）</option> <option value="MUJI 风">MUJI 风</option> <option value="无印良品感">无印良品感</option> <option value="宜家风格">宜家风格</option> <option value="小米系风格">小米系风格</option> <option value="Dyson 质感">Dyson 质感</option> <option value="Apple 产品摄影风格">Apple 产品摄影风格</option> <option value="Chanel 极简黑白风">Chanel 极简黑白风</option> <option value="日系杂志风">日系杂志风 (Kinfolk style)</option> <option value="法式复古风">法式复古风</option> <option value="韩系电商风">韩系电商风（粉嫩清新）</option> <option value="美式自然风">美式自然风（户外木质）</option> <option value="国潮风">国潮风</option> <option value="其他">其他（请在下方备注）</option> </select>
+        <select id="style_brand" name="style_brand"> <option value="">（不指定）</option> <option value="MUJI 风">MUJI 风</option> <option value="无印良品感">无印良品感</option> <option value="宜家风格">宜家风格</option> <option value="小米系风格">小米系风格</option> <option value="Dyson 质感">Dyson 质感</option> <option value="Apple 产品摄影风格">Apple 风格</option> <option value="Chanel 极简黑白风">Chanel 黑白</option> <option value="日系杂志风">日系杂志风</option> <option value="法式复古风">法式复古风</option> <option value="韩系电商风">韩系电商风</option> <option value="美式自然风">美式自然风</option> <option value="国潮风">国潮风</option> <option value="其他">其他</option> </select>
          <label for="brand_other">其他参考品牌/风格备注</label>
          <input type="text" id="brand_other" name="brand_other" placeholder="若上方选择“其他”，请在此处详细说明">
     </div>
 
-    <!-- 5. 文案要求 (可选, 最多5条) -->
+    <!-- Section 5: Copy Requirements (Dynamic) -->
     <div class="form-section">
         <h2>5. 文案要求 (可选, 最多5条)</h2>
         <p class="note">如需在图片上添加文字，请在此填写。可指定细节，或让 AI 自由发挥。</p>
@@ -342,7 +387,7 @@
         <p id="copy-limit-msg" class="note" style="color: red; display: none; margin-top: 10px;">最多添加 5 条文案。</p>
     </div>
 
-    <!-- 6. 技术参数设置 -->
+    <!-- Section 6: Technical Parameters -->
     <div class="form-section">
         <h2>6. 技术参数设置</h2>
         <label>图像尺寸 (像素)</label>
@@ -361,93 +406,100 @@
         <p class="note" style="margin-top: -10px; margin-bottom: 20px;">勾选后尝试生成透明背景PNG。</p>
     </div>
 
-    <!-- 7. 其他要求与备注 -->
+    <!-- Section 7: Other Requirements -->
     <div class="form-section">
         <h2>7. 其他要求与备注</h2>
         <label for="remarks">详细描述或补充说明</label>
-        <textarea id="remarks" name="remarks" rows="5" placeholder="例如：希望整体色调偏暖；画面需要有模糊的背景人物；强调产品的环保材料；如果文案位置选了“其他”，请在此详细说明；其他任何未涵盖的要求..."></textarea>
+        <textarea id="remarks" name="remarks" rows="5" placeholder="例如：希望整体色调偏暖；画面需要有模糊的背景人物；强调产品的环保材料；如果文案位置选了“其他”，请在此详细说明..."></textarea>
         <p class="note">描述越具体，AI 生成效果越接近预期。</p>
     </div>
 
-    <button type="submit" class="submit-btn">提交生成任务</button>
+    <!-- Generate Button -->
+    <button type="button" id="generate-prompt-btn" class="submit-btn">生成 Prompt</button>
 
   </form>
 
+  <!-- Prompt Display Section (Initially Hidden) -->
+  <div id="prompt-display-section" style="display: none;">
+      <h3>🎉 Prompt 生成成功！</h3>
+       <p>
+          请将下方内容复制后粘贴到 <a href="https://chat.openai.com/" target="_blank">ChatGPT (GPT-4o)</a>。然后，请务必使用 ChatGPT 的上传功能，将您在表单中选择的、并在下方 Prompt 文本中<strong>括号里提到的文件</strong>（例如产品图、参考图等）手动上传给 ChatGPT，最后再发送 Prompt。
+       </p>
+
+      <pre id="prompt-output">...</pre> <!-- Prompt will appear here -->
+
+      <div class="copy-btn-container">
+          <button type="button" id="copy-prompt-btn" class="copy-btn"> <span class="copy-icon">📄</span> 一键复制</button>
+      </div>
+       <p id="post-generation-instructions">
+           接下来请打开 <a href="https://chat.openai.com/" target="_blank">ChatGPT</a>，选择 GPT-4o 模型，粘贴上方文本，并<strong>手动上传所需文件</strong>后再发送。
+       </p>
+       <p class="note" style="text-align:center; margin-top: 15px;">请基于这些信息合成图像，保持真实感和产品比例，避免贴图感或虚假光影。谢谢！</p>
+  </div>
+
+
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('image-gen-form');
+
+    // --- Helper Function to Get Optional Element Value ---
+    function getElementValue(id, defaultValue = '') {
+        const element = document.getElementById(id);
+        return element ? element.value.trim() : defaultValue; // Added trim()
+    }
+
+    // --- Helper Function to Get File Name ---
+    function getFileName(id) {
+        const element = document.getElementById(id);
+        return element && element.files.length > 0 ? element.files[0].name : '(未选择文件)'; // Changed default message
+    }
+
     // --- Product Logic ---
     const productContainer = document.getElementById('product-container');
     const addProductBtn = document.getElementById('add-product-btn');
     const productLimitMsg = document.getElementById('product-limit-msg');
     const productRelationsContainer = document.getElementById('product_relations_container');
     const maxProducts = 5;
-    let productCount = 1; // Start with 1 product already displayed
-
+    let productCount = 1;
     function updateAddProductButtonState() {
         addProductBtn.disabled = productCount >= maxProducts;
         productLimitMsg.style.display = productCount >= maxProducts ? 'block' : 'none';
-        // Show relationship text area only if more than one product
         productRelationsContainer.style.display = productCount > 1 ? 'block' : 'none';
     }
-
     addProductBtn.addEventListener('click', function() {
-        if (productCount >= maxProducts) return;
+         if (productCount >= maxProducts) return;
         productCount++;
         const productIndex = productCount;
-
         const newItem = document.createElement('div');
         newItem.classList.add('product-item');
         newItem.setAttribute('data-index', productIndex);
-
         const nameInputId = `product_name_${productIndex}`;
         const fileInputId = `transparent_image_${productIndex}`;
         const modelInputId = `model_file_${productIndex}`;
-
-        // Note: Inputs for added products are NOT marked 'required' in HTML
         newItem.innerHTML = `
             <button type="button" class="remove-btn">移除</button>
             <h4>产品 ${productIndex}</h4>
-            <label for="${nameInputId}">产品 ${productIndex} 名称（中英文）</label>
-            <input type="text" id="${nameInputId}" name="product_name_${productIndex}" placeholder="输入产品 ${productIndex} 的名称">
-
-            <label for="${fileInputId}">上传产品 ${productIndex} 透明图 (PNG)</label>
-            <input type="file" id="${fileInputId}" name="transparent_image_${productIndex}" accept="image/png">
-            <p class="note">请确保图片背景透明。</p>
-
-            <label for="${modelInputId}">上传产品 ${productIndex} 3D模型（可选）</label>
-            <input type="file" id="${modelInputId}" name="model_file_${productIndex}" accept=".zip,.glb,.fbx,.obj,.mtl">
-        `;
-
-        newItem.querySelector('.remove-btn').addEventListener('click', function() {
-            // Do not allow removing the first product item (index 1)
-            // This check relies on the productCount reflecting the actual number including the first one
-            if (productCount <= 1) return;
-
-            newItem.remove();
-            productCount--;
-            updateAddProductButtonState();
-            // Optional: Re-index subsequent items if needed, but simpler not to for basic form submission
-        });
-
+            <label for="${nameInputId}">产品 ${productIndex} 名称</label> <input type="text" id="${nameInputId}" name="product_name_${productIndex}" placeholder="输入产品 ${productIndex} 名称">
+            <label for="${fileInputId}">上传产品 ${productIndex} 透明图</label> <input type="file" id="${fileInputId}" name="transparent_image_${productIndex}" accept="image/png"> <p class="note">需透明背景PNG。</p>
+            <label for="${modelInputId}">上传产品 ${productIndex} 3D模型（可选）</label> <input type="file" id="${modelInputId}" name="model_file_${productIndex}" accept=".zip,.glb,.fbx,.obj,.mtl">`;
+        newItem.querySelector('.remove-btn').addEventListener('click', function() { if (productCount <= 1) return; newItem.remove(); productCount--; updateAddProductButtonState(); });
         productContainer.appendChild(newItem);
         updateAddProductButtonState();
     });
-    updateAddProductButtonState(); // Initial check
+    updateAddProductButtonState();
 
-    // --- Reference Image Logic (No changes needed) ---
+    // --- Reference Image Logic ---
     const referenceContainer = document.getElementById('reference-container');
     const addReferenceBtn = document.getElementById('add-reference-btn');
     const referenceLimitMsg = document.getElementById('reference-limit-msg');
     const maxReferences = 10;
     let referenceCount = 0;
-
     function updateAddReferenceButtonState() {
-        addReferenceBtn.disabled = referenceCount >= maxReferences;
+         addReferenceBtn.disabled = referenceCount >= maxReferences;
         referenceLimitMsg.style.display = referenceCount >= maxReferences ? 'block' : 'none';
     }
-
     addReferenceBtn.addEventListener('click', function() {
-        if (referenceCount >= maxReferences) return;
+         if (referenceCount >= maxReferences) return;
         referenceCount++;
         const referenceIndex = referenceCount;
         const newItem = document.createElement('div');
@@ -456,47 +508,34 @@
         const urlInputId = `ref_url_${referenceIndex}`;
         const notesInputId = `ref_notes_${referenceIndex}`;
         newItem.innerHTML = `
-            <button type="button" class="remove-btn">移除</button>
-            <h4>参考图 ${referenceIndex}</h4>
-            <p class="note">请上传本地图片或输入图片链接（二选一）。</p>
-            <label for="${fileInputId}">上传参考图文件</label>
-            <input type="file" id="${fileInputId}" name="reference_file_${referenceIndex}" accept="image/*">
-            <label for="${urlInputId}">或 输入参考图链接</label>
-            <input type="url" id="${urlInputId}" name="reference_url_${referenceIndex}" placeholder="https://...">
-            <label for="${notesInputId}">参考要点说明</label>
-            <textarea id="${notesInputId}" name="reference_notes_${referenceIndex}" rows="3" placeholder="例如：参考这张图的温暖色调和光线..."></textarea>
-        `;
-        newItem.querySelector('.remove-btn').addEventListener('click', function() {
-            newItem.remove();
-            referenceCount--;
-            updateAddReferenceButtonState();
-        });
+            <button type="button" class="remove-btn">移除</button> <h4>参考图 ${referenceIndex}</h4> <p class="note">上传文件或输入链接（二选一）。</p>
+            <label for="${fileInputId}">上传文件</label> <input type="file" id="${fileInputId}" name="reference_file_${referenceIndex}" accept="image/*">
+            <label for="${urlInputId}">或 输入链接</label> <input type="url" id="${urlInputId}" name="reference_url_${referenceIndex}" placeholder="https://...">
+            <label for="${notesInputId}">参考说明</label> <textarea id="${notesInputId}" name="reference_notes_${referenceIndex}" rows="3" placeholder="例如：参考此图色调..."></textarea>`;
+        newItem.querySelector('.remove-btn').addEventListener('click', function() { newItem.remove(); referenceCount--; updateAddReferenceButtonState(); });
         referenceContainer.appendChild(newItem);
         updateAddReferenceButtonState();
     });
     updateAddReferenceButtonState();
 
-    // --- Copy Requirements Logic (No changes needed) ---
+    // --- Copy Requirements Logic ---
     const copyContainer = document.getElementById('copy-container');
     const addCopyBtn = document.getElementById('add-copy-btn');
     const copyLimitMsg = document.getElementById('copy-limit-msg');
     const aiDecideCheckbox = document.getElementById('copy_ai_decide');
     const maxCopyLines = 5;
     let copyCount = 0;
-
     function toggleCopyControls(disabled) {
         const copyItems = copyContainer.querySelectorAll('.copy-item');
-        copyItems.forEach(item => {
-            item.querySelectorAll('.copy-controls input, .copy-controls select').forEach(control => { control.disabled = disabled; });
-        });
+        copyItems.forEach(item => { item.querySelectorAll('.copy-controls input, .copy-controls select').forEach(control => { control.disabled = disabled; }); });
     }
     function updateAddCopyButtonState() {
-        addCopyBtn.disabled = copyCount >= maxCopyLines;
+         addCopyBtn.disabled = copyCount >= maxCopyLines;
         copyLimitMsg.style.display = copyCount >= maxCopyLines ? 'block' : 'none';
     }
     aiDecideCheckbox.addEventListener('change', function() { toggleCopyControls(this.checked); });
     addCopyBtn.addEventListener('click', function() {
-        if (copyCount >= maxCopyLines) return;
+         if (copyCount >= maxCopyLines) return;
         copyCount++;
         const copyIndex = copyCount;
         const newItem = document.createElement('div');
@@ -506,16 +545,13 @@
         const colorInputId = `copy_color_${copyIndex}`;
         const positionInputId = `copy_position_${copyIndex}`;
         newItem.innerHTML = `
-            <button type="button" class="remove-btn">移除</button>
-            <h4>文案 ${copyIndex}</h4>
-            <label for="${textInputId}">文案内容</label>
-            <textarea id="${textInputId}" name="copy_text_${copyIndex}" rows="2" placeholder="输入您想添加的文字" required></textarea>
+            <button type="button" class="remove-btn">移除</button> <h4>文案 ${copyIndex}</h4>
+            <label for="${textInputId}">内容</label> <textarea id="${textInputId}" name="copy_text_${copyIndex}" rows="2" placeholder="输入文字" required></textarea>
             <div class="copy-controls">
-                 <div> <label for="${fontInputId}">字体建议</label> <input type="text" id="${fontInputId}" name="copy_font_${copyIndex}" placeholder="例如: 黑体, 宋体, 手写风"> </div>
-                 <div> <label for="${colorInputId}">颜色建议</label> <input type="color" id="${colorInputId}" name="copy_color_${copyIndex}" value="#333333"> </div>
-                 <div> <label for="${positionInputId}">大致位置</label> <select id="${positionInputId}" name="copy_position_${copyIndex}"> <option value="">（不指定）</option> <option value="top_left">左上角</option> <option value="top_center">顶部居中</option> <option value="top_right">右上角</option> <option value="middle_left">中部居左</option> <option value="center">画面正中</option> <option value="middle_right">中部居右</option> <option value="bottom_left">左下角</option> <option value="bottom_center">底部居中</option> <option value="bottom_right">右下角</option> <option value="other">其他（备注）</option> </select> </div>
-            </div>
-        `;
+                 <div> <label for="${fontInputId}">字体</label> <input type="text" id="${fontInputId}" name="copy_font_${copyIndex}" placeholder="如: 黑体"> </div>
+                 <div> <label for="${colorInputId}">颜色</label> <input type="color" id="${colorInputId}" name="copy_color_${copyIndex}" value="#333333"> </div>
+                 <div> <label for="${positionInputId}">位置</label> <select id="${positionInputId}" name="copy_position_${copyIndex}"> <option value="">不指定</option> <option value="top_left">左上</option> <option value="top_center">顶中</option> <option value="top_right">右上</option> <option value="middle_left">中左</option> <option value="center">正中</option> <option value="middle_right">中右</option> <option value="bottom_left">左下</option> <option value="bottom_center">底中</option> <option value="bottom_right">右下</option> <option value="other">其他</option> </select> </div>
+            </div>`;
         newItem.querySelector('.remove-btn').addEventListener('click', function() { newItem.remove(); copyCount--; updateAddCopyButtonState(); });
         copyContainer.appendChild(newItem);
         toggleCopyControls(aiDecideCheckbox.checked);
@@ -523,6 +559,195 @@
     });
     updateAddCopyButtonState();
     toggleCopyControls(aiDecideCheckbox.checked);
+
+    // --- Generate Prompt Logic ---
+    const generateBtn = document.getElementById('generate-prompt-btn');
+    const promptOutput = document.getElementById('prompt-output');
+    const promptDisplaySection = document.getElementById('prompt-display-section');
+    const copyBtn = document.getElementById('copy-prompt-btn');
+
+    generateBtn.addEventListener('click', function() {
+        // Basic validation (ensure at least first product name and PNG are filled)
+        if (!getElementValue('product_name_1') || getFileName('transparent_image_1') === '(未选择文件)') {
+             alert('请至少填写产品1的名称并上传产品1的透明图！');
+             document.getElementById('product_name_1').focus();
+             return;
+        }
+
+        let promptText = "请根据以下信息和接下来您手动上传的文件生成图像：\n\n";
+
+        // 1. 产品信息
+        promptText += "【产品信息】\n";
+        const productItems = productContainer.querySelectorAll('.product-item');
+        productItems.forEach((item, index) => {
+            const i = index + 1;
+            const productName = getElementValue('product_name_' + i);
+            if (!productName && i > 1 && getFileName('transparent_image_' + i) === '(未选择文件)') {
+                return; // Skip empty extra product slots
+            }
+            promptText += `- 产品 ${i} 名称: ${productName || '(未填写)'}\n`;
+
+            const transparentFileName = getFileName('transparent_image_' + i);
+            if (transparentFileName !== '(未选择文件)') {
+                promptText += `  - 透明图文件: (请在ChatGPT中上传 '${transparentFileName}')\n`; // <-- MODIFIED
+            } else if (i === 1){ // Only require for first product for basic validation pass
+                 promptText += `  - 透明图文件: (必须上传产品1的透明图)\n`; // Should not happen due to validation, but safe fallback
+            }
+
+            const modelFileName = getFileName('model_file_' + i);
+            if (modelFileName !== '(未选择文件)') {
+                 promptText += `  - 3D模型文件: (请在ChatGPT中上传 '${modelFileName}')\n`; // <-- MODIFIED
+            }
+        });
+        if (productCount > 1) {
+            const relations = getElementValue('product_relations');
+            if (relations) {
+                 promptText += "\n【多产品关系与布局】\n" + relations + "\n";
+            }
+        }
+        promptText += "\n";
+
+        // 2. 参考图
+        const refItems = referenceContainer.querySelectorAll('.reference-item');
+        if (refItems.length > 0) {
+            promptText += "【参考图/链接及说明】\n";
+            refItems.forEach((item, index) => {
+                const i = index + 1;
+                const refFile = getFileName(`ref_file_${i}`);
+                const refUrl = getElementValue(`ref_url_${i}`);
+                const refNotes = getElementValue(`ref_notes_${i}`);
+                promptText += `- 参考 ${i}:\n`;
+                if (refFile !== '(未选择文件)') {
+                    promptText += `  - 文件: (请在ChatGPT中上传 '${refFile}')\n`; // <-- MODIFIED
+                } else if (refUrl) {
+                    promptText += `  - 链接: ${refUrl}\n`;
+                } else {
+                     promptText += `  - (未提供文件或链接)\n`;
+                }
+                 if (refNotes) {
+                    promptText += `  - 说明: ${refNotes}\n`;
+                }
+            });
+             promptText += "\n";
+        }
+
+        // 3. 图像用途
+        const purpose = getElementValue('scene_purpose');
+        const purposeOther = getElementValue('purpose_other');
+        promptText += "【图像用途】\n";
+        promptText += `- 主要用途: ${purpose}\n`;
+        if (purpose === '其他' && purposeOther) {
+            promptText += `  - 其他说明: ${purposeOther}\n`;
+        }
+         promptText += "\n";
+
+        // 4. 背景与风格
+        const bgStyle = getElementValue('background_style');
+        const bgOther = getElementValue('background_other');
+        promptText += "【背景风格】\n";
+        promptText += `- 风格: ${bgStyle}\n`;
+         if (bgStyle === '其他' && bgOther) {
+            promptText += `  - 其他说明: ${bgOther}\n`;
+        }
+        const styleKeywords = [
+            getElementValue('style_space'),
+            getElementValue('style_light'),
+            getElementValue('style_composition'),
+            getElementValue('style_brand')
+        ].filter(Boolean); // Filter out empty values
+        if (styleKeywords.length > 0) {
+            promptText += "\n【图片风格关键词】\n- " + styleKeywords.join(" / ") + "\n";
+        }
+        const brandOther = getElementValue('brand_other');
+         if (getElementValue('style_brand') === '其他' && brandOther) {
+             promptText += `  - 其他品牌/风格说明: ${brandOther}\n`;
+         }
+         promptText += "\n";
+
+        // 5. 文案要求
+        const copyItems = copyContainer.querySelectorAll('.copy-item');
+        if (aiDecideCheckbox.checked) {
+            promptText += "【文案要求】\n- 由 AI 决定字体、颜色和位置。\n";
+            if (copyItems.length > 0) {
+                 promptText += "  - 文案内容如下 (请AI排版):\n";
+                 copyItems.forEach((item, index) => {
+                      const copyText = getElementValue('copy_text_' + (index + 1));
+                      if(copyText) { // Only include if text is entered
+                          promptText += `    - "${copyText}"\n`;
+                      }
+                 });
+            }
+        } else if (copyItems.length > 0) {
+            promptText += "【文案要求】\n";
+            let hasContent = false;
+            copyItems.forEach((item, index) => {
+                const i = index + 1;
+                const text = getElementValue(`copy_text_${i}`);
+                if (!text) return; // Skip if no text content
+                hasContent = true;
+                const font = getElementValue(`copy_font_${i}`);
+                const color = getElementValue(`copy_color_${i}`);
+                const positionSelect = document.getElementById(`copy_position_${i}`);
+                const positionValue = positionSelect ? positionSelect.value : '';
+                const positionText = positionSelect && positionValue ? positionSelect.options[positionSelect.selectedIndex].text : '';
+
+                promptText += `- 文案 ${i}: "${text}"\n`;
+                if (font) promptText += `  - 字体建议: ${font}\n`;
+                if (color !== '#333333') promptText += `  - 颜色建议: ${color}\n`; // Only include if not default
+                if (positionValue) promptText += `  - 位置建议: ${positionValue === 'other' ? '其他(见下方备注)' : positionText}\n`;
+            });
+            if (!hasContent && copyItems.length > 0) { // Case where items exist but have no text
+                promptText += "- (无有效文案内容填写)\n";
+            }
+        }
+        // Add newline only if copy section had content or items
+        if (copyItems.length > 0) promptText += "\n";
+
+
+        // 6. 技术参数
+        const width = getElementValue('image_width');
+        const height = getElementValue('image_height');
+        const numImages = getElementValue('num_images');
+        const transparent = document.getElementById('transparent_bg').checked;
+        promptText += "【技术规格】\n";
+        promptText += `- 尺寸: ${width} x ${height} 像素\n`;
+        promptText += `- 数量: ${numImages} 张\n`;
+        promptText += `- 背景: ${transparent ? '需要透明背景 (PNG)' : '不需要透明背景'}\n\n`;
+
+        // 7. 其他备注
+        const remarks = getElementValue('remarks');
+        if (remarks) {
+            promptText += "【其他备注】\n" + remarks + "\n\n";
+        }
+
+        // Final instructions
+        promptText += "---\n";
+        // --- MODIFIED FINAL INSTRUCTION ---
+        promptText += "请基于以上文本信息，并结合您接下来手动上传的、在上方括号中提及的文件（如产品图、参考图等），来合成图像。请保持真实感和产品比例，避免贴图感或虚假光影。谢谢！";
+
+        // Display the prompt
+        promptOutput.textContent = promptText;
+        promptDisplaySection.style.display = 'block';
+        promptDisplaySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // --- Copy Prompt Logic ---
+    copyBtn.addEventListener('click', function() {
+        const textToCopy = promptOutput.textContent;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            // Success feedback
+            const originalText = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<span class="copy-icon">✅</span> 已复制!';
+            copyBtn.style.backgroundColor = '#4cae4c';
+            setTimeout(() => {
+                copyBtn.innerHTML = originalText;
+                copyBtn.style.backgroundColor = '#5cb85c';
+            }, 2000);
+        }).catch(err => {
+            console.error('无法复制文本: ', err);
+            alert('复制失败，请手动复制。');
+        });
+    });
 
   });
 </script>
