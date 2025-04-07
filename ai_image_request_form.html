@@ -42,24 +42,23 @@
     .reference-item p.note, .copy-item p.note, .product-item p.note { margin-top: -2px; margin-bottom: 10px; font-size: 0.85em; }
     .copy-item .copy-controls input:disabled, .copy-item .copy-controls select:disabled { background-color: #e9ecef; cursor: not-allowed; opacity: 0.7; }
     #product_relations_container { margin-top: 25px; padding-top: 20px; border-top: 1px solid #eee; }
+    /* Style for the static number display */
+    #num_images_display { display: inline-block; padding: 10px; border: 1px solid #ccc; border-radius: 4px; background-color: #e9ecef; width: 100%; box-sizing: border-box; margin-bottom: 16px; font-size: 1em; color: #495057; cursor: not-allowed; }
 
     /* --- Prompt Output Styles --- */
     #prompt-display-section { background-color: #fff; padding: 24px 30px; border-radius: 8px; margin-top: 32px; box-shadow: 0 3px 8px rgba(0,0,0,0.07); border: 1px solid #4CAF50; }
-    /* Style for the list of files to upload */
     #files-to-upload-section { margin-bottom: 20px; padding: 15px; background-color: #fffadf; border: 1px solid #ffecb3; border-radius: 5px; }
     #files-to-upload-section h4 { margin-top: 0; margin-bottom: 10px; color: #8a6d3b; font-size: 1.1em; }
     #files-to-upload-list { list-style-type: '📂'; padding-left: 25px; margin: 0; color: #555; }
     #files-to-upload-list li { margin-bottom: 5px; }
     #files-to-upload-list code { background-color: #eee; padding: 2px 5px; border-radius: 3px; font-size: 0.95em; }
-
-    /* Style for the actual prompt text to be copied */
     #prompt-output { background-color: #e9f5e9; border: 1px solid #c8e6c9; border-radius: 4px; padding: 15px; white-space: pre-wrap; word-wrap: break-word; font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 0.95em; line-height: 1.7; max-height: 450px; overflow-y: auto; margin-bottom: 20px; color: #1b5e20; }
     .copy-btn-container { text-align: center; margin-top: 15px; margin-bottom: 15px; }
     #copy-prompt-btn .copy-icon { margin-right: 8px; font-size: 1.1em; vertical-align: middle; }
     #post-generation-instructions { text-align: center; font-size: 1em; color: #555; }
     #post-generation-instructions a, #prompt-display-section > p a { color: #007bff; text-decoration: none; font-weight: bold; }
     #post-generation-instructions a:hover, #prompt-display-section > p a:hover { text-decoration: underline; }
-    #prompt-display-section > p.user-instruction { font-size: 1.05em; line-height: 1.7; margin-bottom: 15px; } /* Style for user instruction paragraph */
+    #prompt-display-section > p.user-instruction { font-size: 1.05em; line-height: 1.7; margin-bottom: 15px; }
     strong { color: #d9534f; font-weight: bold; }
 
   </style>
@@ -81,11 +80,9 @@
             <label for="product_name_1">产品名称（中英文）</label>
             <input type="text" id="product_name_1" name="product_name_1" required placeholder="例如：智能保温杯 Smart Thermal Mug">
 
-            <!-- MODIFIED: Single Product PNG Upload -->
             <label for="product_png_1">上传产品透明图 (PNG)</label>
             <input type="file" id="product_png_1" name="product_png_1" accept="image/png" required>
             <p class="note">请确保图片背景透明。</p>
-            <!-- End Modification -->
 
             <label for="model_file_1" style="margin-top: 15px;">上传产品3D模型或纹理包（可选）</label>
             <input type="file" id="model_file_1" name="model_file_1" accept=".zip,.glb,.fbx,.obj,.mtl">
@@ -164,6 +161,7 @@
         <h2>4. 背景与风格偏好</h2>
         <label for="background_style">背景风格（单选）</label>
         <select id="background_style" name="background_style">
+             <option value="" selected>（不指定）</option> <!-- MODIFIED: Added default -->
              <optgroup label="室内场景">
                 <option value="北欧风卧室">北欧风卧室</option>
                 <option value="日式木质地板">日式木质地板</option>
@@ -245,10 +243,14 @@
             <div> <label for="image_height">高度</label> <input type="number" id="image_height" name="image_height" value="1024" min="128" max="1792" required> </div>
         </div>
         <p class="note">默认 1024x1024。GPT-4o 最大尺寸：长边≤1792px, 短边≤1024px。</p>
-        <label for="num_images">单次生图数量</label>
-        <input type="number" id="num_images" name="num_images" value="1" min="1" max="4" required>
-        <p class="note">默认生成 1 张。最多可生成 4 张供选择。</p>
-        <div class="checkbox-container">
+
+        <!-- MODIFIED: Number of images section -->
+        <label>单次生图数量</label>
+        <span id="num_images_display">1</span> <!-- Display 1, non-editable -->
+        <p class="note">将固定生成 1 张图像。</p> <!-- Updated note -->
+        <!-- End Modification -->
+
+        <div class="checkbox-container" style="margin-top: 25px;"> <!-- Added margin-top for spacing -->
            <input type="checkbox" id="transparent_bg" name="transparent_bg" value="true">
            <label for="transparent_bg">需要透明背景 (生成 PNG)</label>
         </div>
@@ -275,7 +277,7 @@
           请复制<strong style="color: #1b5e20;">下方绿色框内的文本</strong>后粘贴到 <a href="https://chat.openai.com/" target="_blank">ChatGPT (GPT-4o)</a>。
        </p>
         <!-- Section to list files user needs to upload -->
-        <div id="files-to-upload-section" style="display: none;"> <!-- Hide if no files needed -->
+        <div id="files-to-upload-section" style="display: none;">
              <h4>请务必在 ChatGPT 中手动上传以下文件：</h4>
              <ul id="files-to-upload-list"></ul>
         </div>
@@ -289,7 +291,7 @@
        <p id="post-generation-instructions">
            接下来请打开 <a href="https://chat.openai.com/" target="_blank">ChatGPT</a>，选择 GPT-4o 模型，粘贴上方文本，并<strong>手动上传所需文件</strong>后再发送。
        </p>
-       <p class="note" style="text-align:center; margin-top: 15px;">请基于这些信息合成图像，保持真实感和产品比例，避免贴图感或虚假光影。谢谢！</p> <!-- This final note is for the user -->
+       <p class="note" style="text-align:center; margin-top: 15px;">请基于这些信息合成图像，保持真实感和产品比例，避免贴图感或虚假光影。谢谢！</p>
   </div>
 
 
@@ -298,9 +300,9 @@
     const form = document.getElementById('image-gen-form');
 
     // --- Helper Function to Get Optional Element Value ---
-    function getElementValue(id, defaultValue = '') { /* ... same ... */ return document.getElementById(id) ? document.getElementById(id).value.trim() : defaultValue; }
+    function getElementValue(id, defaultValue = '') { const el = document.getElementById(id); return el ? el.value.trim() : defaultValue; }
     // --- Helper Function to Get File Name ---
-    function getFileName(id) { /* ... same ... */ const el = document.getElementById(id); return el && el.files.length > 0 ? el.files[0].name : ''; } // Return empty string if no file
+    function getFileName(id) { const el = document.getElementById(id); return el && el.files.length > 0 ? el.files[0].name : ''; }
 
     // --- Product Logic ---
     const productContainer = document.getElementById('product-container');
@@ -308,12 +310,12 @@
     const productLimitMsg = document.getElementById('product-limit-msg');
     const productRelationsContainer = document.getElementById('product_relations_container');
     const maxProducts = 5; let productCount = 1;
-    function updateAddProductButtonState() { /* ... same ... */ addProductBtn.disabled = productCount >= maxProducts; productLimitMsg.style.display = productCount >= maxProducts ? 'block' : 'none'; productRelationsContainer.style.display = productCount > 1 ? 'block' : 'none'; }
-    addProductBtn.addEventListener('click', function() { // Modified for single PNG
+    function updateAddProductButtonState() { addProductBtn.disabled = productCount >= maxProducts; productLimitMsg.style.display = productCount >= maxProducts ? 'block' : 'none'; productRelationsContainer.style.display = productCount > 1 ? 'block' : 'none'; }
+    addProductBtn.addEventListener('click', function() {
          if (productCount >= maxProducts) return;
         productCount++; const productIndex = productCount; const newItem = document.createElement('div'); newItem.classList.add('product-item'); newItem.setAttribute('data-index', productIndex);
         const nameInputId = `product_name_${productIndex}`;
-        const pngInputId = `product_png_${productIndex}`; // Back to single PNG id
+        const pngInputId = `product_png_${productIndex}`;
         const modelInputId = `model_file_${productIndex}`;
         newItem.innerHTML = `
             <button type="button" class="remove-btn">移除</button> <h4>产品 ${productIndex}</h4>
@@ -325,32 +327,29 @@
     });
     updateAddProductButtonState();
 
-    // --- Reference Image Logic --- (No changes needed here)
-    /* ... Reference logic remains the same ... */
+    // --- Reference Image Logic ---
     const referenceContainer = document.getElementById('reference-container'); const addReferenceBtn = document.getElementById('add-reference-btn'); const referenceLimitMsg = document.getElementById('reference-limit-msg'); const maxReferences = 10; let referenceCount = 0; function updateAddReferenceButtonState() { addReferenceBtn.disabled = referenceCount >= maxReferences; referenceLimitMsg.style.display = referenceCount >= maxReferences ? 'block' : 'none';} addReferenceBtn.addEventListener('click', function() { if (referenceCount >= maxReferences) return; referenceCount++; const referenceIndex = referenceCount; const newItem = document.createElement('div'); newItem.classList.add('reference-item'); const fileInputId = `ref_file_${referenceIndex}`; const urlInputId = `ref_url_${referenceIndex}`; const notesInputId = `ref_notes_${referenceIndex}`; newItem.innerHTML = `<button type="button" class="remove-btn">移除</button> <h4>参考图 ${referenceIndex}</h4> <p class="note">上传文件或输入链接（二选一）。</p> <label for="${fileInputId}">上传文件</label> <input type="file" id="${fileInputId}" name="reference_file_${referenceIndex}" accept="image/*"> <label for="${urlInputId}">或 输入链接</label> <input type="url" id="${urlInputId}" name="reference_url_${referenceIndex}" placeholder="https://..."> <label for="${notesInputId}">参考说明</label> <textarea id="${notesInputId}" name="reference_notes_${referenceIndex}" rows="3" placeholder="例如：参考此图色调..."></textarea>`; newItem.querySelector('.remove-btn').addEventListener('click', function() { newItem.remove(); referenceCount--; updateAddReferenceButtonState(); }); referenceContainer.appendChild(newItem); updateAddReferenceButtonState(); }); updateAddReferenceButtonState();
 
-    // --- Copy Requirements Logic --- (No changes needed here)
-    /* ... Copy logic remains the same ... */
+    // --- Copy Requirements Logic ---
     const copyContainer = document.getElementById('copy-container'); const addCopyBtn = document.getElementById('add-copy-btn'); const copyLimitMsg = document.getElementById('copy-limit-msg'); const aiDecideCheckbox = document.getElementById('copy_ai_decide'); const maxCopyLines = 5; let copyCount = 0; function toggleCopyControls(disabled) { const copyItems = copyContainer.querySelectorAll('.copy-item'); copyItems.forEach(item => { item.querySelectorAll('.copy-controls input, .copy-controls select').forEach(control => { control.disabled = disabled; }); }); } function updateAddCopyButtonState() { addCopyBtn.disabled = copyCount >= maxCopyLines; copyLimitMsg.style.display = copyCount >= maxCopyLines ? 'block' : 'none'; } aiDecideCheckbox.addEventListener('change', function() { toggleCopyControls(this.checked); }); addCopyBtn.addEventListener('click', function() { if (copyCount >= maxCopyLines) return; copyCount++; const copyIndex = copyCount; const newItem = document.createElement('div'); newItem.classList.add('copy-item'); const textInputId = `copy_text_${copyIndex}`; const fontInputId = `copy_font_${copyIndex}`; const colorInputId = `copy_color_${copyIndex}`; const positionInputId = `copy_position_${copyIndex}`; newItem.innerHTML = `<button type="button" class="remove-btn">移除</button> <h4>文案 ${copyIndex}</h4> <label for="${textInputId}">内容</label> <textarea id="${textInputId}" name="copy_text_${copyIndex}" rows="2" placeholder="输入文字" required></textarea> <div class="copy-controls"> <div> <label for="${fontInputId}">字体</label> <input type="text" id="${fontInputId}" name="copy_font_${copyIndex}" placeholder="如: 黑体"> </div> <div> <label for="${colorInputId}">颜色</label> <input type="color" id="${colorInputId}" name="copy_color_${copyIndex}" value="#333333"> </div> <div> <label for="${positionInputId}">位置</label> <select id="${positionInputId}" name="copy_position_${copyIndex}"> <option value="">不指定</option> <option value="top_left">左上</option> <option value="top_center">顶中</option> <option value="top_right">右上</option> <option value="middle_left">中左</option> <option value="center">正中</option> <option value="middle_right">中右</option> <option value="bottom_left">左下</option> <option value="bottom_center">底中</option> <option value="bottom_right">右下</option> <option value="other">其他</option> </select> </div> </div>`; newItem.querySelector('.remove-btn').addEventListener('click', function() { newItem.remove(); copyCount--; updateAddCopyButtonState(); }); copyContainer.appendChild(newItem); toggleCopyControls(aiDecideCheckbox.checked); updateAddCopyButtonState(); }); updateAddCopyButtonState(); toggleCopyControls(aiDecideCheckbox.checked);
 
     // --- Generate Prompt Logic ---
     const generateBtn = document.getElementById('generate-prompt-btn');
-    const promptOutput = document.getElementById('prompt-output'); // The <pre> tag for ChatGPT text
-    const promptDisplaySection = document.getElementById('prompt-display-section'); // The whole results area
-    const filesToUploadList = document.getElementById('files-to-upload-list'); // The <ul> for file list
-    const filesToUploadSection = document.getElementById('files-to-upload-section'); // The container div for file list
+    const promptOutput = document.getElementById('prompt-output');
+    const promptDisplaySection = document.getElementById('prompt-display-section');
+    const filesToUploadList = document.getElementById('files-to-upload-list');
+    const filesToUploadSection = document.getElementById('files-to-upload-section');
     const copyBtn = document.getElementById('copy-prompt-btn');
 
     generateBtn.addEventListener('click', function() {
-        // Validation for first product PNG
-        if (!getElementValue('product_name_1') || !getFileName('product_png_1')) { // Check if filename is empty
+        if (!getElementValue('product_name_1') || !getFileName('product_png_1')) {
              alert('请至少填写产品1的名称并上传产品1的透明图！');
              document.getElementById('product_name_1').focus();
              return;
         }
 
-        let promptForChatGPT = ""; // This string goes into the <pre> tag
-        let filesForUserUpload = []; // Array to store filenames for the user list
+        let promptForChatGPT = "";
+        let filesForUserUpload = [];
 
         // 1. 产品信息
         promptForChatGPT += "【产品信息】\n";
@@ -358,23 +357,19 @@
         productItems.forEach((item, index) => {
             const i = index + 1;
             const productName = getElementValue('product_name_' + i);
-            const pngFileName = getFileName('product_png_' + i); // Use single PNG field ID
-            if (!productName && i > 1 && !pngFileName) {
-                return; // Skip empty extra product slots
-            }
+            const pngFileName = getFileName('product_png_' + i);
+            if (!productName && i > 1 && !pngFileName) { return; }
             promptForChatGPT += `- 产品 ${i} 名称: ${productName || '(未填写)'}\n`;
-
             if (pngFileName) {
-                promptForChatGPT += `  - 产品图文件: ${pngFileName}\n`; // Add filename to prompt
-                filesForUserUpload.push(`产品 ${i} 透明图: ${pngFileName}`); // Add to user list
+                promptForChatGPT += `  - 产品图文件: ${pngFileName}\n`;
+                filesForUserUpload.push(`产品 ${i} 透明图: ${pngFileName}`);
             } else if (i === 1){
-                 promptForChatGPT += `  - 产品图文件: (必需 - 但未检测到文件)\n`; // Should not happen
+                 promptForChatGPT += `  - 产品图文件: (必需 - 但未检测到文件)\n`;
             }
-
             const modelFileName = getFileName('model_file_' + i);
             if (modelFileName) {
-                 promptForChatGPT += `  - 3D模型文件: ${modelFileName}\n`; // Add filename to prompt
-                 filesForUserUpload.push(`产品 ${i} 3D模型: ${modelFileName}`); // Add to user list
+                 promptForChatGPT += `  - 3D模型文件: ${modelFileName}\n`;
+                 filesForUserUpload.push(`产品 ${i} 3D模型: ${modelFileName}`);
             }
         });
         if (productCount > 1) {
@@ -392,20 +387,20 @@
                 const refUrl = getElementValue(`ref_url_${i}`);
                 const refNotes = getElementValue(`ref_notes_${i}`);
                 let hasRefSource = false;
-                if (refFile || refUrl || refNotes) { // Only add section if there's some info
+                if (refFile || refUrl || refNotes) {
                      promptForChatGPT += `- 参考 ${i}:\n`;
                      if (refFile) {
-                         promptForChatGPT += `  - 文件: ${refFile}\n`; // Add filename to prompt
-                         filesForUserUpload.push(`参考图 ${i}: ${refFile}`); // Add to user list
+                         promptForChatGPT += `  - 文件: ${refFile}\n`;
+                         filesForUserUpload.push(`参考图 ${i}: ${refFile}`);
                          hasRefSource = true;
                      } else if (refUrl) {
-                         promptForChatGPT += `  - 链接: ${refUrl}\n`; // Link is fine for prompt
+                         promptForChatGPT += `  - 链接: ${refUrl}\n`;
                          hasRefSource = true;
                      }
                       if (refNotes) {
                          promptForChatGPT += `  - 说明: ${refNotes}\n`;
                      }
-                      if (!hasRefSource && !refNotes){ // Edge case: item added but nothing filled
+                      if (!hasRefSource && !refNotes){
                           promptForChatGPT += `  - (无有效信息)\n`;
                       }
                 }
@@ -413,61 +408,76 @@
              promptForChatGPT += "\n";
         }
 
-        // 3. 图像用途 (No changes needed in prompt generation logic)
-        /* ... */
+        // 3. 图像用途
          const purpose = getElementValue('scene_purpose'); const purposeOther = getElementValue('purpose_other'); promptForChatGPT += "【图像用途】\n"; promptForChatGPT += `- 主要用途: ${purpose}\n`; if (purpose === '其他' && purposeOther) { promptForChatGPT += `  - 其他说明: ${purposeOther}\n`; } promptForChatGPT += "\n";
 
-        // 4. 背景与风格 (No changes needed in prompt generation logic)
-        /* ... */
-         const bgStyle = getElementValue('background_style'); const bgOther = getElementValue('background_other'); promptForChatGPT += "【背景风格】\n"; promptForChatGPT += `- 风格: ${bgStyle}\n`; if (bgStyle === '其他' && bgOther) { promptForChatGPT += `  - 其他说明: ${bgOther}\n`; } const styleKeywords = [ getElementValue('style_space'), getElementValue('style_light'), getElementValue('style_composition'), getElementValue('style_brand') ].filter(Boolean); if (styleKeywords.length > 0) { promptForChatGPT += "\n【图片风格关键词】\n- " + styleKeywords.join(" / ") + "\n"; } const brandOther = getElementValue('brand_other'); if (getElementValue('style_brand') === '其他' && brandOther) { promptForChatGPT += `  - 其他品牌/风格说明: ${brandOther}\n`; } promptForChatGPT += "\n";
+        // 4. 背景与风格
+         const bgStyle = getElementValue('background_style'); // Will be "" if default is kept
+         const bgOther = getElementValue('background_other');
+         promptForChatGPT += "【背景风格】\n";
+         if (bgStyle || (bgStyle === '其他' && bgOther)) { // Only add if not default empty or if 'Other' is selected with text
+             promptForChatGPT += `- 风格: ${bgStyle || '(未指定)'}\n`; // Show '(未指定)' if empty
+             if (bgStyle === '其他' && bgOther) {
+                 promptForChatGPT += `  - 其他说明: ${bgOther}\n`;
+             }
+         } else {
+             promptForChatGPT += "- (未指定)\n"; // Explicitly state not specified
+         }
 
+         const styleKeywords = [ getElementValue('style_space'), getElementValue('style_light'), getElementValue('style_composition'), getElementValue('style_brand') ].filter(Boolean);
+         if (styleKeywords.length > 0) {
+             promptForChatGPT += "\n【图片风格关键词】\n- " + styleKeywords.join(" / ") + "\n";
+         }
+         const brandOther = getElementValue('brand_other');
+         if (getElementValue('style_brand') === '其他' && brandOther) {
+             promptForChatGPT += `  - 其他品牌/风格说明: ${brandOther}\n`;
+         }
+         promptForChatGPT += "\n";
 
-        // 5. 文案要求 (No changes needed in prompt generation logic)
-        /* ... */
+        // 5. 文案要求
         const copyItems = copyContainer.querySelectorAll('.copy-item'); let copySectionContent = "";
         if (aiDecideCheckbox.checked) { copySectionContent += "- 由 AI 决定字体、颜色和位置。\n"; if (copyItems.length > 0) { let texts = []; copyItems.forEach((item, index) => { const copyText = getElementValue('copy_text_' + (index + 1)); if(copyText) { texts.push(`"${copyText}"`); } }); if (texts.length > 0) { copySectionContent += `  - 文案内容如下 (请AI排版): ${texts.join(', ')}\n`; } } } else if (copyItems.length > 0) { let hasContent = false; copyItems.forEach((item, index) => { const i = index + 1; const text = getElementValue(`copy_text_${i}`); if (!text) return; hasContent = true; const font = getElementValue(`copy_font_${i}`); const color = getElementValue(`copy_color_${i}`); const positionSelect = document.getElementById(`copy_position_${i}`); const positionValue = positionSelect ? positionSelect.value : ''; const positionText = positionSelect && positionValue ? positionSelect.options[positionSelect.selectedIndex].text : ''; copySectionContent += `- 文案 ${i}: "${text}"\n`; if (font) copySectionContent += `  - 字体建议: ${font}\n`; if (color !== '#333333') copySectionContent += `  - 颜色建议: ${color}\n`; if (positionValue) copySectionContent += `  - 位置建议: ${positionValue === 'other' ? '其他(见下方备注)' : positionText}\n`; }); if (!hasContent && copyItems.length > 0) { copySectionContent += "- (无有效文案内容填写)\n"; } } if (copySectionContent) { promptForChatGPT += "【文案要求】\n" + copySectionContent + "\n"; }
 
+        // 6. 技术参数
+         const width = getElementValue('image_width');
+         const height = getElementValue('image_height');
+         const numImages = 1; // MODIFIED: Hardcoded to 1
+         const transparent = document.getElementById('transparent_bg').checked;
+         promptForChatGPT += "【技术规格】\n";
+         promptForChatGPT += `- 尺寸: ${width} x ${height} 像素\n`;
+         promptForChatGPT += `- 数量: ${numImages} 张\n`; // Use the hardcoded value
+         promptForChatGPT += `- 背景: ${transparent ? '需要透明背景 (PNG)' : '不需要透明背景'}\n\n`;
 
-        // 6. 技术参数 (No changes needed in prompt generation logic)
-        /* ... */
-         const width = getElementValue('image_width'); const height = getElementValue('image_height'); const numImages = getElementValue('num_images'); const transparent = document.getElementById('transparent_bg').checked; promptForChatGPT += "【技术规格】\n"; promptForChatGPT += `- 尺寸: ${width} x ${height} 像素\n`; promptForChatGPT += `- 数量: ${numImages} 张\n`; promptForChatGPT += `- 背景: ${transparent ? '需要透明背景 (PNG)' : '不需要透明背景'}\n\n`;
-
-        // 7. 其他备注 (No changes needed in prompt generation logic)
-        /* ... */
+        // 7. 其他备注
          const remarks = getElementValue('remarks'); if (remarks) { promptForChatGPT += "【其他备注】\n" + remarks + "\n\n"; }
 
-
         // --- Display logic ---
-        // Display the clean prompt for ChatGPT in the <pre> tag
-        promptOutput.textContent = promptForChatGPT.trim(); // Use trim() to remove trailing newlines
+        promptOutput.textContent = promptForChatGPT.trim();
 
-        // Populate the user file list
-        filesToUploadList.innerHTML = ''; // Clear previous list
+        filesToUploadList.innerHTML = '';
         if (filesForUserUpload.length > 0) {
             filesForUserUpload.forEach(fileInfo => {
                 const li = document.createElement('li');
-                // Extract filename for styling
                 const parts = fileInfo.split(': ');
                 if (parts.length === 2) {
                     li.innerHTML = `${parts[0]}: <code>${parts[1]}</code>`;
                 } else {
-                    li.textContent = fileInfo; // Fallback
+                    li.textContent = fileInfo;
                 }
                 filesToUploadList.appendChild(li);
             });
-            filesToUploadSection.style.display = 'block'; // Show the file list section
+            filesToUploadSection.style.display = 'block';
         } else {
-            filesToUploadSection.style.display = 'none'; // Hide if no files to upload
+            filesToUploadSection.style.display = 'none';
         }
 
-        // Show the entire results section
         promptDisplaySection.style.display = 'block';
         promptDisplaySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
     // --- Copy Prompt Logic ---
     copyBtn.addEventListener('click', function() {
-        const textToCopy = promptOutput.textContent; // Copy only the text from <pre>
+        const textToCopy = promptOutput.textContent;
         navigator.clipboard.writeText(textToCopy).then(() => {
             const originalText = copyBtn.innerHTML; copyBtn.innerHTML = '<span class="copy-icon">✅</span> 已复制!'; copyBtn.style.backgroundColor = '#4cae4c';
             setTimeout(() => { copyBtn.innerHTML = originalText; copyBtn.style.backgroundColor = '#5cb85c'; }, 2000);
